@@ -219,7 +219,7 @@ def main():
             continue
 
         print(f"\n{'=' * 20} Đang xử lý ảnh: {image_file} {'=' * 20}")
-        image_color = cv2.imread(image_file)
+        image_color = cv2.imread(img_base_path + '/' + image_file)
         if image_color is None: continue
         image_gray = cv2.cvtColor(image_color, cv2.COLOR_BGR2GRAY)
 
