@@ -174,8 +174,9 @@ def main():
     Hàm chính điều phối toàn bộ quy trình Machine Learning.
     """
     # --- THAM SỐ CẤU HÌNH ---
-    POS_SAMPLES_FILE = 'data/possamples.mat'
-    NEG_SAMPLES_FILE = 'data/negsamples.mat'
+    data_base_path = 'data'
+    POS_SAMPLES_FILE = data_base_path + '/' + 'possamples.mat'
+    NEG_SAMPLES_FILE = data_base_path + '/' + 'negsamples.mat'
     IMAGE_FILES = ['img1.jpg', 'img2.jpg', 'img3.jpg', 'img4.jpg']
     CONF_THRESH_PRE_NMS = 1.0
     IOU_THRESH_NMS = 0.2
