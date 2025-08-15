@@ -6,7 +6,7 @@ import numpy as np
 import scipy.io
 from matplotlib.patches import Rectangle
 from sklearn.metrics import classification_report, accuracy_score
-from sklearn.model_selection import train_test_split
+from sklearn.model_selection import train_test_split, GridSearchCV
 from sklearn.preprocessing import StandardScaler
 from sklearn.svm import LinearSVC
 
@@ -44,13 +44,47 @@ def load_training_data(positive_file, negative_file):
 # ==============================================================================
 def train_svm_model(X_train_scaled, y_train):
     """
-    Huấn luyện một mô hình Linear SVM trên dữ liệu đã được chuẩn hóa.
-    """
-    print("\n--- Đang huấn luyện mô hình Linear SVM ---")
-    svm_model = LinearSVC(random_state=42, tol=1e-5, C=1)
-    svm_model.fit(X_train_scaled, y_train)
-    print("Huấn luyện hoàn tất.")
-    return svm_model
+       Sử dụng GridSearchCV để tìm tham số C tốt nhất cho LinearSVC và huấn luyện mô hình cuối cùng.
+
+       Args:
+           X_train_scaled (np.array): Dữ liệu training đã được chuẩn hóa.
+           y_train (np.array): Nhãn của dữ liệu training.
+
+       Returns:
+           LinearSVC: Mô hình SVM tốt nhất đã được huấn luyện trên toàn bộ tập train.
+       """
+    print("\n--- Tinh chỉnh siêu tham số (Hyperparameter Tuning) cho SVM ---")
+
+    # Định nghĩa lưới các giá trị C cần thử.
+    # Các giá trị này trải dài trên nhiều bậc độ lớn.
+    param_grid = {'C': [0.001, 0.01, 0.1, 1, 10]}
+
+    # Thiết lập GridSearchCV
+    # cv=3: sử dụng 3-fold cross-validation.
+    # n_jobs=-1: sử dụng tất cả các CPU core có sẵn để tăng tốc quá trình.
+    # max_iter: tăng số vòng lặp tối đa để đảm bảo thuật toán hội tụ.
+    grid_search = GridSearchCV(
+        LinearSVC(random_state=42, tol=1e-5, max_iter=4000),
+        param_grid,
+        cv=3,
+        scoring='accuracy',
+        n_jobs=-1
+    )
+
+    # Bắt đầu tìm kiếm
+    print("Đang thực hiện Grid Search để tìm C tốt nhất... (có thể mất một lúc)")
+    grid_search.fit(X_train_scaled, y_train)
+
+    # In ra kết quả
+    print("\nKết quả Grid Search:")
+    print(f"  - Tham số C tốt nhất được tìm thấy: {grid_search.best_params_['C']}")
+    print(f"  - Độ chính xác cross-validation tốt nhất: {grid_search.best_score_:.4f}")
+
+    print("Huấn luyện hoàn tất với tham số C tốt nhất.")
+
+    # GridSearchCV tự động huấn luyện lại mô hình tốt nhất trên toàn bộ tập dữ liệu train
+    # và trả về mô hình đó qua thuộc tính `best_estimator_`
+    return grid_search.best_estimator_
 
 
 # ==============================================================================
@@ -174,9 +208,9 @@ def main():
     Hàm chính điều phối toàn bộ quy trình Machine Learning.
     """
     # --- THAM SỐ CẤU HÌNH ---
-    data_base_path = 'data'
-    POS_SAMPLES_FILE = data_base_path + '/' + 'possamples.mat'
-    NEG_SAMPLES_FILE = data_base_path + '/' + 'negsamples.mat'
+    DATA_BASED_PATH = 'data'
+    POS_SAMPLES_FILE = os.path.join(DATA_BASED_PATH, 'possamples.mat')
+    NEG_SAMPLES_FILE = os.path.join(DATA_BASED_PATH, 'negsamples.mat')
     IMAGE_FILES = ['img1.jpg', 'img2.jpg', 'img3.jpg', 'img4.jpg']
     CONF_THRESH_PRE_NMS = 1.0
     IOU_THRESH_NMS = 0.2
@@ -212,14 +246,15 @@ def main():
 
     # --- BƯỚC 6: ÁP DỤNG BỘ NHẬN DIỆN (DETECTOR) LÊN ẢNH THỰC TẾ ---
     print("\n--- Áp dụng bộ nhận diện lên các ảnh test ---")
-    img_base_path = 'images'
+    IMG_BASE_PATH = 'images'
     for image_file in IMAGE_FILES:
-        if not os.path.exists(img_base_path + '/' + image_file):
+        img_file = os.path.join(IMG_BASE_PATH, image_file)
+        if not os.path.exists(img_file):
             print(f"\nCảnh báo: Không tìm thấy file ảnh {image_file}. Bỏ qua.")
             continue
 
         print(f"\n{'=' * 20} Đang xử lý ảnh: {image_file} {'=' * 20}")
-        image_color = cv2.imread(img_base_path + '/' + image_file)
+        image_color = cv2.imread(img_file)
         if image_color is None: continue
         image_gray = cv2.cvtColor(image_color, cv2.COLOR_BGR2GRAY)
 
