@@ -387,8 +387,9 @@ def main():
     # CẬP NHẬT: Đảm bảo các đường dẫn này trỏ đến đúng vị trí tệp của bạn.
     # Ví dụ: Nếu possamples.mat nằm trong thư mục gốc, hãy sử dụng 'possamples.mat'
     # Nếu nó nằm trong thư mục 'data', hãy sử dụng 'data/possamples.mat'
-    pos_mat_file = 'data/possamples.mat'
-    neg_mat_file = 'data/negsamples.mat'
+    DATA_BASED_PATH = 'data'
+    pos_mat_file = os.path.join(DATA_BASED_PATH, 'possamples.mat')
+    neg_mat_file = os.path.join(DATA_BASED_PATH, 'negsamples.mat')
 
     # Thiết lập thư mục đầu ra
     output_folder = 'outputs'
@@ -414,8 +415,8 @@ def main():
 
     # 3. Phát hiện khuôn mặt trong ảnh test
     # CẬP NHẬT: Đảm bảo các đường dẫn này trỏ đến đúng vị trí tệp của bạn.
-    test_images = ['images/test/img1.jpg', 'images/test/img2.jpg', 'images/test/img3.jpg', 'images/test/img4.jpg',
-                   'images/test/img5.jpg', ]
+    IMG_BASE_PATH = 'images/test'
+    test_images = ['img1.jpg', 'img2.jpg', 'img3.jpg', 'img4.jpg', 'img5.jpg']
 
     # CẬP NHẬT RẤT QUAN TRỌNG: Điều chỉnh các ngưỡng này để cải thiện phát hiện.
     # Bắt đầu bằng cách TĂNG confidence_threshold (ví dụ: lên 1.0, 2.0, 3.0, 4.0, 5.0)
@@ -425,6 +426,10 @@ def main():
 
     print("\n--- Bắt đầu thử nghiệm phát hiện trên các ảnh test (Với HOG) ---")
     for img_file in test_images:
+        img_file = os.path.join(IMG_BASE_PATH, img_file)
+        if not os.path.exists(img_file):
+            print(f"\nCảnh báo: Không tìm thấy file ảnh {img_file}. Bỏ qua.")
+            continue
         detect_faces(img_file, best_svm_model, mean, std, PATCH_SIZE,
                      output_folder, conf_thresh=confidence_threshold, nms_thresh=nms_threshold)
     print("--- Kết thúc thử nghiệm phát hiện ---")
