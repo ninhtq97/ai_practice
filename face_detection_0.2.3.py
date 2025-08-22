@@ -72,7 +72,7 @@ def train_svm_model(X_train_scaled, y_train):
     )
 
     # Bắt đầu tìm kiếm
-    print("Đang thực hiện Grid Search để tìm C tốt nhất... (có thể mất một lúc)")
+    print("Đang thực hiện Grid Search để tìm C tốt nhất...")
     grid_search.fit(X_train_scaled, y_train)
 
     # In ra kết quả
@@ -185,7 +185,7 @@ def non_maximal_suppression(detections, iou_threshold):
 
 
 def display_results(image, detections, title=""):
-    fig, ax = plt.subplots(1, figsize=(12, 8))
+    fig, ax = plt.subplots(1, figsize=(10, 8))
     ax.imshow(cv2.cvtColor(image, cv2.COLOR_BGR2RGB))
     for d in detections:
         box, score = d['box'], d['score']
@@ -211,9 +211,9 @@ def main():
     DATA_BASED_PATH = 'data'
     POS_SAMPLES_FILE = os.path.join(DATA_BASED_PATH, 'possamples.mat')
     NEG_SAMPLES_FILE = os.path.join(DATA_BASED_PATH, 'negsamples.mat')
-    IMAGE_FILES = ['img1.jpg', 'img2.jpg', 'img3.jpg', 'img4.jpg']
-    CONF_THRESH_PRE_NMS = 1.0
-    IOU_THRESH_NMS = 0.2
+    IMAGE_FILES = ['img1.jpg', 'img2.jpg', 'img3.jpg', 'img4.jpg', 'img5.jpg']
+    CONF_THRESH_PRE_NMS = 0.65
+    IOU_THRESH_NMS = 0.1
 
     # --- BƯỚC 1: TẢI DỮ LIỆU ---
     X, y, patch_size = load_training_data(POS_SAMPLES_FILE, NEG_SAMPLES_FILE)
@@ -246,7 +246,7 @@ def main():
 
     # --- BƯỚC 6: ÁP DỤNG BỘ NHẬN DIỆN (DETECTOR) LÊN ẢNH THỰC TẾ ---
     print("\n--- Áp dụng bộ nhận diện lên các ảnh test ---")
-    IMG_BASE_PATH = 'images'
+    IMG_BASE_PATH = 'images/test'
     for image_file in IMAGE_FILES:
         img_file = os.path.join(IMG_BASE_PATH, image_file)
         if not os.path.exists(img_file):
