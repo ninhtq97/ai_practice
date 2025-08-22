@@ -69,23 +69,13 @@ def load_and_prepare_data(pos_mat_path, neg_mat_path, patch_size):
     # Thử các khóa khác nhau để tìm dữ liệu mẫu
     X_pos_raw = data_pos.get('possamples')
     if X_pos_raw is None:
-        X_pos_raw = data_pos.get('patches')  # Thử khóa 'patches' nếu 'possamples' không có
-        if X_pos_raw is None:
-            print(
-                "Lỗi: Không tìm thấy khóa 'possamples' hoặc 'patches' trong tệp dương tính. Vui lòng kiểm tra cấu trúc tệp .mat.")
-            return None, None, None, None, None, None
-        else:
-            print("Cảnh báo: Đã sử dụng khóa 'patches' cho dữ liệu dương tính.")
+        print("Lỗi: Không tìm thấy khóa 'possamples' trong tệp dương tính. Vui lòng kiểm tra cấu trúc tệp .mat.")
+        return None, None, None, None, None, None
 
     X_neg_raw = data_neg.get('negsamples')
     if X_neg_raw is None:
-        X_neg_raw = data_neg.get('patches')  # Thử khóa 'patches' nếu 'negsamples' không có
-        if X_neg_raw is None:
-            print(
-                "Lỗi: Không tìm thấy khóa 'negsamples' hoặc 'patches' trong tệp âm tính. Vui lòng kiểm tra cấu trúc tệp .mat.")
-            return None, None, None, None, None, None
-        else:
-            print("Cảnh báo: Đã sử dụng khóa 'patches' cho dữ liệu âm tính.")
+        print("Lỗi: Không tìm thấy khóa 'negsamples' trong tệp âm tính. Vui lòng kiểm tra cấu trúc tệp .mat.")
+        return None, None, None, None, None, None
 
     print(f"Shape of X_pos_raw: {X_pos_raw.shape}")
     print(f"Shape of X_neg_raw: {X_neg_raw.shape}")
