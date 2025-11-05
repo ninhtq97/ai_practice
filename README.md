@@ -18,7 +18,7 @@ cd face_detection
 python face_detection_0.2.3.py
 ```
 
-## Install Graph Analysis
+## Install Graph
 
 ```bash
 pip install networkx matplotlib
