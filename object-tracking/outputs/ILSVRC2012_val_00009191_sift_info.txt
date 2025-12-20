@@ -1,0 +1,14 @@
+Ảnh: data/ILSVRC2012_val_00009191.JPEG
+Số keypoints: 764
+
+Chi tiết keypoints (10 điểm đầu):
+  1. Tọa độ: (2.95, 23.76), Size: 2.01, Angle: 102.68°, Response: 0.0734
+  2. Tọa độ: (2.95, 23.76), Size: 2.01, Angle: 234.81°, Response: 0.0734
+  3. Tọa độ: (3.26, 219.49), Size: 2.18, Angle: 229.92°, Response: 0.0252
+  4. Tọa độ: (3.58, 57.05), Size: 2.27, Angle: 276.72°, Response: 0.0676
+  5. Tọa độ: (4.10, 164.19), Size: 1.91, Angle: 330.87°, Response: 0.0156
+  6. Tọa độ: (4.21, 168.06), Size: 2.60, Angle: 164.98°, Response: 0.0169
+  7. Tọa độ: (5.51, 266.88), Size: 2.02, Angle: 247.82°, Response: 0.0484
+  8. Tọa độ: (6.16, 277.54), Size: 1.92, Angle: 164.40°, Response: 0.0258
+  9. Tọa độ: (7.09, 137.96), Size: 5.30, Angle: 91.32°, Response: 0.0187
+  10. Tọa độ: (7.53, 159.95), Size: 5.39, Angle: 94.47°, Response: 0.0150
