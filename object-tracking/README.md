@@ -19,7 +19,7 @@ Dự án này triển khai thuật toán phát hiện đặc trưng **SURF** the
 
 ```bash
 # Cài đặt phụ thuộc cơ bản
-pip install numpy
+pip install opencv-contrib-python numpy
 
 # OpenCV có SURF cần build thủ công với nonfree (xem bên dưới)
 ```
@@ -154,6 +154,7 @@ chmod +x build_opencv_with_surf.sh
 ```
 
 Script sẽ:
+
 - Cài đặt dependencies (cmake, pkg-config, eigen, tbb, ...)
 - Clone opencv và opencv_contrib từ GitHub
 - Cấu hình CMake với `OPENCV_ENABLE_NONFREE=ON`
@@ -214,6 +215,7 @@ cmake -D CMAKE_BUILD_TYPE=RELEASE \
 ```
 
 **Các tham số quan trọng:**
+
 - `OPENCV_ENABLE_NONFREE=ON`: Kích hoạt SURF, SIFT và các thuật toán nonfree
 - `OPENCV_EXTRA_MODULES_PATH`: Đường dẫn đến opencv_contrib/modules
 - `PYTHON3_EXECUTABLE`: Đảm bảo build cho đúng Python version
@@ -242,6 +244,7 @@ python3 -c "import cv2; surf = cv2.xfeatures2d.SURF_create(); print('SURF initia
 ```
 
 Nếu thành công, bạn sẽ thấy:
+
 ```
 OpenCV version: 4.x.x
 SURF available: True
@@ -258,6 +261,7 @@ rm -rf ~/opencv_build
 ### Xử lý sự cố
 
 **Lỗi: CMake không tìm thấy Python**
+
 ```bash
 # Chỉ định rõ Python path
 -D PYTHON3_EXECUTABLE=$(which python3) \
@@ -266,12 +270,14 @@ rm -rf ~/opencv_build
 ```
 
 **Lỗi: Build failed do thiếu dependencies**
+
 ```bash
 # Cài đầy đủ dependencies
 brew install cmake pkg-config jpeg libpng libtiff openexr eigen tbb hdf5
 ```
 
 **OpenCV bị conflict với version cũ**
+
 ```bash
 # Gỡ OpenCV cũ
 pip uninstall opencv-python opencv-contrib-python -y
