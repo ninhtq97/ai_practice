@@ -1,0 +1,14 @@
+Ảnh: ./data/messi_1.webp
+Số keypoints: 711
+
+Chi tiết keypoints (10 điểm đầu):
+  1. Tọa độ: (367.65, 312.39), Size: 22.00, Angle: 301.31°, Response: 25339.3262
+  2. Tọa độ: (84.71, 323.27), Size: 17.00, Angle: 337.24°, Response: 23362.7969
+  3. Tọa độ: (388.33, 364.42), Size: 21.00, Angle: 19.51°, Response: 23057.2852
+  4. Tọa độ: (280.70, 95.98), Size: 23.00, Angle: 272.01°, Response: 20947.5059
+  5. Tọa độ: (386.34, 355.93), Size: 16.00, Angle: 164.80°, Response: 20405.7500
+  6. Tọa độ: (613.78, 298.80), Size: 21.00, Angle: 31.16°, Response: 20283.9668
+  7. Tọa độ: (472.41, 261.59), Size: 94.00, Angle: 214.07°, Response: 20267.4492
+  8. Tọa độ: (483.14, 214.25), Size: 22.00, Angle: 246.89°, Response: 19273.5898
+  9. Tọa độ: (280.06, 94.89), Size: 28.00, Angle: 257.89°, Response: 18764.3926
+  10. Tọa độ: (352.63, 321.37), Size: 17.00, Angle: 172.05°, Response: 17807.3809

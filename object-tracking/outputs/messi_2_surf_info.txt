@@ -1,0 +1,14 @@
+Ảnh: ./data/messi_2.jpeg
+Số keypoints: 867
+
+Chi tiết keypoints (10 điểm đầu):
+  1. Tọa độ: (272.32, 359.56), Size: 52.00, Angle: 193.51°, Response: 37549.6562
+  2. Tọa độ: (271.88, 358.20), Size: 57.00, Angle: 190.86°, Response: 29719.3789
+  3. Tọa độ: (219.38, 304.80), Size: 17.00, Angle: 10.40°, Response: 26878.8457
+  4. Tọa độ: (373.57, 379.31), Size: 20.00, Angle: 268.08°, Response: 21454.0977
+  5. Tọa độ: (262.18, 364.35), Size: 22.00, Angle: 101.76°, Response: 20756.3516
+  6. Tọa độ: (400.18, 374.10), Size: 29.00, Angle: 356.10°, Response: 19842.7129
+  7. Tọa độ: (399.97, 374.87), Size: 26.00, Angle: 353.05°, Response: 19599.5273
+  8. Tọa độ: (562.85, 340.07), Size: 16.00, Angle: 170.72°, Response: 18386.7520
+  9. Tọa độ: (398.03, 345.55), Size: 111.00, Angle: 200.81°, Response: 18213.3711
+  10. Tọa độ: (395.74, 346.32), Size: 121.00, Angle: 203.56°, Response: 17459.8340

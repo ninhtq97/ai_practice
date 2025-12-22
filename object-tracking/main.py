@@ -18,8 +18,10 @@ def detect_surf_features(image_path, output_dir="outputs"):
         output_dir: Thư mục lưu kết quả
 
     Returns:
+        img: Ảnh gốc (BGR)
         keypoints: Danh sách các điểm đặc trưng phát hiện được
         descriptors: Descriptors tương ứng
+        img_with_keypoints: Ảnh đã vẽ keypoints
     """
     # Đọc ảnh
     img = cv2.imread(image_path)
@@ -77,44 +79,57 @@ def detect_surf_features(image_path, output_dir="outputs"):
 
     print(f"✓ Đã lưu thông tin: {info_file}")
 
-    return keypoints, descriptors
+    return img, keypoints, descriptors, img_with_keypoints
 
 
-def list_image_files(data_dir="data"):
+def match_two_images(image1_path, image2_path, output_dir="outputs"):
     """
-    Liệt kê tất cả các file ảnh trong thư mục.
-
-    Args:
-        data_dir: Đường dẫn thư mục chứa ảnh
-
-    Returns:
-        List các đường dẫn ảnh
+    Phát hiện SURF trên hai ảnh và vẽ đường nối keypoint so khớp giữa chúng.
     """
-    data_path = Path(data_dir)
-    if not data_path.exists():
-        raise FileNotFoundError(f"Thư mục không tồn tại: {data_dir}")
+    img1, kp1, des1, img1_with = detect_surf_features(image1_path, output_dir)
+    img2, kp2, des2, img2_with = detect_surf_features(image2_path, output_dir)
 
-    # Danh sách extension ảnh hỗ trợ
-    image_extensions = {'.jpg', '.jpeg', '.png', '.bmp', '.tif', '.tiff', '.JPG', '.JPEG', '.PNG'}
+    if des1 is None or des2 is None or len(kp1) < 2 or len(kp2) < 2:
+        raise RuntimeError("Không đủ keypoints để so khớp giữa hai ảnh")
 
-    # Tìm tất cả file ảnh (tìm recursive)
-    image_files = sorted([
-        f for f in data_path.rglob('*')
-        if f.is_file() and f.suffix in image_extensions
-    ])
+    matcher = cv2.BFMatcher(cv2.NORM_L2, crossCheck=True)
+    matches = matcher.match(des1, des2)
+    matches = sorted(matches, key=lambda m: m.distance)
+    matches = matches[:min(100, len(matches))]
 
-    return image_files
+    matched_vis = cv2.drawMatches(
+        img1_with,
+        kp1,
+        img2_with,
+        kp2,
+        matches,
+        None,
+        flags=cv2.DrawMatchesFlags_NOT_DRAW_SINGLE_POINTS,
+    )
+
+    output_path = Path(output_dir)
+    output_path.mkdir(parents=True, exist_ok=True)
+
+    img1_name = Path(image1_path).stem
+    img2_name = Path(image2_path).stem
+    match_file = output_path / f"{img1_name}_vs_{img2_name}_surf_match.jpg"
+    cv2.imwrite(str(match_file), matched_vis)
+    print(f"✓ Đã lưu ảnh so khớp giữa hai ảnh: {match_file}")
 
 
 def parse_args():
     parser = argparse.ArgumentParser(
-        description="Phát hiện đặc trưng SURF trên tất cả ảnh trong thư mục data"
+        description="So khớp đặc trưng SURF giữa 2 ảnh"
     )
     parser.add_argument(
-        "--data-dir",
+        "image1",
         type=str,
-        default="./data",
-        help="Thư mục chứa ảnh (mặc định: data)"
+        help="Ảnh gốc/tham chiếu"
+    )
+    parser.add_argument(
+        "image2",
+        type=str,
+        help="Ảnh cần so khớp"
     )
     parser.add_argument(
         "--output-dir",
@@ -128,55 +143,16 @@ def parse_args():
 def main():
     args = parse_args()
 
-    print("=== SURF Feature Detection (Batch Mode) ===")
-    print(f"Thư mục dữ liệu: {args.data_dir}")
+    print("=== SURF Feature Matching giữa 2 ảnh ===")
+    print(f"Ảnh 1: {args.image1}")
+    print(f"Ảnh 2: {args.image2}")
     print(f"Thư mục output: {args.output_dir}")
     print()
 
     try:
-        # Liệt kê các file ảnh
-        image_files = list_image_files(args.data_dir)
-
-        if not image_files:
-            print(f"⚠️ Không tìm thấy ảnh nào trong {args.data_dir}")
-            return 1
-
-        print(f"Tìm thấy {len(image_files)} ảnh:")
-        for f in image_files:
-            print(f"  - {f}")
-        print()
-
-        # Xử lý từng ảnh
-        total_keypoints = 0
-        processed_count = 0
-        failed_count = 0
-
-        for image_file in image_files:
-            try:
-                print(f"Xử lý: {image_file.name}")
-                keypoints, descriptors = detect_surf_features(
-                    str(image_file),
-                    output_dir=args.output_dir
-                )
-                total_keypoints += len(keypoints)
-                processed_count += 1
-            except Exception as e:
-                print(f"  ❌ Lỗi: {e}")
-                failed_count += 1
-            print()
-
-        # Tóm tắt kết quả
+        match_two_images(args.image1, args.image2, args.output_dir)
         print("=== Hoàn tất ===")
-        print(f"Tổng ảnh: {len(image_files)}")
-        print(f"Thành công: {processed_count}")
-        print(f"Thất bại: {failed_count}")
-        print(f"Tổng keypoints: {total_keypoints}")
-
-        if failed_count == 0:
-            return 0
-        else:
-            return 1
-
+        return 0
     except Exception as e:
         print(f"❌ Lỗi: {e}")
         return 1
