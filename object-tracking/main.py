@@ -72,7 +72,7 @@ def detect_surf_features(image_path, output_dir="outputs"):
         f.write(f"Ảnh: {image_path}\n")
         f.write(f"Số keypoints: {len(keypoints)}\n\n")
         f.write("Chi tiết keypoints (10 điểm đầu):\n")
-        for i, kp in enumerate(keypoints[:10]):
+        for i, kp in enumerate(keypoints):
             f.write(f"  {i+1}. Tọa độ: ({kp.pt[0]:.2f}, {kp.pt[1]:.2f}), "
                    f"Size: {kp.size:.2f}, Angle: {kp.angle:.2f}°, "
                    f"Response: {kp.response:.4f}\n")
