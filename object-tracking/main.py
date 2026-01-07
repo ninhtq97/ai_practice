@@ -11,7 +11,7 @@ from pathlib import Path
 
 def detect_surf_features(image_path, output_dir="outputs"):
     """
-    Phát hiện đặc trưng SURF trong ảnh và lưu kết quả.
+    Phát hiện đặc trưng SURF trong ảnh, trả về keypoints/descriptors và lưu file info.
 
     Args:
         image_path: Đường dẫn tới ảnh cần phát hiện
@@ -55,18 +55,12 @@ def detect_surf_features(image_path, output_dir="outputs"):
         flags=cv2.DRAW_MATCHES_FLAGS_DRAW_RICH_KEYPOINTS
     )
 
-    # Tạo thư mục output nếu chưa có
+    # Tạo thư mục output nếu chưa có (dùng cho file info)
     output_path = Path(output_dir)
     output_path.mkdir(parents=True, exist_ok=True)
 
-    # Lưu ảnh kết quả
-    img_name = Path(image_path).stem
-    output_file = output_path / f"{img_name}_surf_detected.jpg"
-    cv2.imwrite(str(output_file), img_with_keypoints)
-
-    print(f"✓ Đã lưu kết quả: {output_file}")
-
     # Lưu thông tin keypoints vào file text
+    img_name = Path(image_path).stem
     info_file = output_path / f"{img_name}_surf_info.txt"
     with open(info_file, 'w', encoding='utf-8') as f:
         f.write(f"Ảnh: {image_path}\n")
@@ -97,15 +91,31 @@ def match_two_images(image1_path, image2_path, output_dir="outputs"):
     matches = sorted(matches, key=lambda m: m.distance)
     matches = matches[:min(100, len(matches))]
 
+    # Vẽ match trên ảnh gốc (không có keypoints vẽ sẵn) để đảm bảo đường nối chính xác
     matched_vis = cv2.drawMatches(
-        img1_with,
+        img1,
         kp1,
-        img2_with,
+        img2,
         kp2,
         matches,
         None,
         flags=cv2.DrawMatchesFlags_NOT_DRAW_SINGLE_POINTS,
     )
+
+    # Ghép 3 panel theo chiều dọc: ảnh1_detected, ảnh2_detected, match
+    def pad_to_width(img, target_w):
+        h, w = img.shape[:2]
+        if w == target_w:
+            return img
+        pad_left = (target_w - w) // 2
+        pad_right = target_w - w - pad_left
+        return cv2.copyMakeBorder(img, 0, 0, pad_left, pad_right, cv2.BORDER_CONSTANT, value=(0, 0, 0))
+
+    target_w = max(img1_with.shape[1], img2_with.shape[1], matched_vis.shape[1])
+    img1_panel = pad_to_width(img1_with, target_w)
+    img2_panel = pad_to_width(img2_with, target_w)
+    match_panel = pad_to_width(matched_vis, target_w)
+    composite = np.vstack([img1_panel, img2_panel, match_panel])
 
     output_path = Path(output_dir)
     output_path.mkdir(parents=True, exist_ok=True)
@@ -113,7 +123,7 @@ def match_two_images(image1_path, image2_path, output_dir="outputs"):
     img1_name = Path(image1_path).stem
     img2_name = Path(image2_path).stem
     match_file = output_path / f"{img1_name}_vs_{img2_name}_surf_match.jpg"
-    cv2.imwrite(str(match_file), matched_vis)
+    cv2.imwrite(str(match_file), composite)
     print(f"✓ Đã lưu ảnh so khớp giữa hai ảnh: {match_file}")
 
 
