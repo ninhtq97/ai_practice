@@ -1,7 +1,7 @@
-Ảnh: ./data/40-speed-limit.png
+Ảnh: image_2
 Số keypoints: 341
 
-Chi tiết keypoints (10 điểm đầu):
+Chi tiết keypoints:
   1. Tọa độ: (255.26, 327.36), Size: 65.00, Angle: 190.26°, Response: 75570.1172
   2. Tọa độ: (284.50, 383.88), Size: 57.00, Angle: 26.77°, Response: 68886.2109
   3. Tọa độ: (276.57, 266.05), Size: 107.00, Angle: 214.70°, Response: 67680.2891

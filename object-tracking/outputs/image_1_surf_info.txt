@@ -1,7 +1,7 @@
-Ảnh: ./data/img_1.webp
+Ảnh: image_1
 Số keypoints: 1276
 
-Chi tiết keypoints (10 điểm đầu):
+Chi tiết keypoints:
   1. Tọa độ: (448.33, 266.30), Size: 55.00, Angle: 83.60°, Response: 23628.6621
   2. Tọa độ: (465.20, 310.66), Size: 56.00, Angle: 234.94°, Response: 22129.7051
   3. Tọa độ: (448.68, 265.87), Size: 60.00, Angle: 97.94°, Response: 21652.5391
